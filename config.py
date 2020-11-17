@@ -37,7 +37,7 @@ class Config(object):
             self.update_eng()
         elif language == "korean" or language == self.language_map_reverse["korean"]:
             self.update_korean()
-        elif language == "ch" or language == self.language_map["ch"]:
+        elif language == "ch" or language == self.language_map_reverse["ch"]:
             self.update_chinese()
         else:
             print("language not right: {}".format(language))

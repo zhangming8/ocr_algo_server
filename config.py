@@ -14,7 +14,7 @@ class Config(object):
 
     # params for text detector
     det_algorithm = "DB"
-    det_model_dir = "../PaddleOCR/inference/det_db/ch_ppocr_server_v1.1_det_infer/"
+    det_model_dir = "./inference/det_db/ch_ppocr_server_v1.1_det_infer/"
     det_max_side_len = 960
 
     # DB parmas
@@ -46,18 +46,19 @@ class Config(object):
     def update_jap(self):
         # params for text recognizer
         self.rec_algorithm = "CRNN"
-        self.rec_model_dir = "../PaddleOCR/inference/rec_crnn/japan_ppocr_mobile_v1.1_rec_infer/"
+        # self.rec_model_dir = "./inference/rec_crnn/japan_ppocr_mobile_v1.1_rec_infer/"
+        self.rec_model_dir = "./output/rec_japan/best_accuracy_infer/"
 
-        self.rec_image_shape = "3, 32, 320"
+        self.rec_image_shape = "3, 32, 800"  # "3, 32, 320"
         self.rec_char_type = 'japan'  # "en", "ch", 'japan', 'korean', 'french', 'german'
         self.rec_batch_num = 4
-        self.max_text_length = 25
+        self.max_text_length = 50  # 25
 
         self.rec_char_dict_path = "ppocr/utils/dict/japan_dict.txt"
-        self.use_space_char = False  # True
+        self.use_space_char = False
 
         self.use_angle_cls = False
-        self.cls_model_dir = "../PaddleOCR/inference/cls/ch_ppocr_mobile_v1.1_cls_infer/"
+        self.cls_model_dir = "./inference/cls/ch_ppocr_mobile_v1.1_cls_infer/"
         self.cls_image_shape = "3, 48, 192"
         self.label_list = ['0', '180']
         self.cls_batch_num = 30
@@ -66,18 +67,18 @@ class Config(object):
     def update_eng(self):
         # params for text recognizer
         self.rec_algorithm = "CRNN"
-        self.rec_model_dir = "../PaddleOCR/inference/rec_crnn/en_ppocr_mobile_v1.1_rec_infer/"
+        self.rec_model_dir = "./inference/rec_crnn/en_ppocr_mobile_v1.1_rec_infer/"
 
         self.rec_image_shape = "3, 32, 320"
         self.rec_char_type = 'ch'  # "en", "ch", 'japan', 'korean', 'french', 'german'
-        self.rec_batch_num = 30
+        self.rec_batch_num = 4
         self.max_text_length = 30
 
         self.rec_char_dict_path = "./ppocr/utils/ic15_dict.txt"
         self.use_space_char = False
 
         self.use_angle_cls = False
-        self.cls_model_dir = "../PaddleOCR/inference/cls/ch_ppocr_mobile_v1.1_cls_infer/"
+        self.cls_model_dir = "./inference/cls/ch_ppocr_mobile_v1.1_cls_infer/"
         self.cls_image_shape = "3, 48, 192"
         self.label_list = ['0', '180']
         self.cls_batch_num = 30
@@ -86,18 +87,18 @@ class Config(object):
     def update_korean(self):
         # params for text recognizer
         self.rec_algorithm = "CRNN"
-        self.rec_model_dir = "../PaddleOCR/inference/rec_crnn/korean_ppocr_mobile_v1.1_rec_infer/"
+        self.rec_model_dir = "./inference/rec_crnn/korean_ppocr_mobile_v1.1_rec_infer/"
 
         self.rec_image_shape = "3, 32, 320"
         self.rec_char_type = 'korean'  # "en", "ch", 'japan', 'korean', 'french', 'german'
-        self.rec_batch_num = 30
+        self.rec_batch_num = 4
         self.max_text_length = 25
 
         self.rec_char_dict_path = "./ppocr/utils/dict/korean_dict.txt"
         self.use_space_char = False
 
         self.use_angle_cls = False
-        self.cls_model_dir = "../PaddleOCR/inference/cls/ch_ppocr_mobile_v1.1_cls_infer/"
+        self.cls_model_dir = "./inference/cls/ch_ppocr_mobile_v1.1_cls_infer/"
         self.cls_image_shape = "3, 48, 192"
         self.label_list = ['0', '180']
         self.cls_batch_num = 30
@@ -106,19 +107,20 @@ class Config(object):
     def update_chinese(self):
         # params for text recognizer
         self.rec_algorithm = "CRNN"
-        self.rec_model_dir = "../PaddleOCR/inference/rec_crnn/ch_ppocr_mobile_v1.1_rec_infer/"
+        self.rec_model_dir = "./inference/rec_crnn/ch_ppocr_mobile_v1.1_rec_infer/"
 
         self.rec_image_shape = "3, 32, 320"
         self.rec_char_type = 'ch'  # "en", "ch", 'japan', 'korean', 'french', 'german'
-        self.rec_batch_num = 30
+        self.rec_batch_num = 4
         self.max_text_length = 25
 
         self.rec_char_dict_path = "./ppocr/utils/ppocr_keys_v1.txt"
         self.use_space_char = False
 
-        self.use_angle_cls = True
-        self.cls_model_dir = "../PaddleOCR/inference/cls/ch_ppocr_mobile_v1.1_cls_infer/"
+        self.use_angle_cls = False # True
+        self.cls_model_dir = "./inference/cls/ch_ppocr_mobile_v1.1_cls_infer/"
         self.cls_image_shape = "3, 48, 192"
         self.label_list = ['0', '180']
         self.cls_batch_num = 30
         self.cls_thresh = 0.9
+

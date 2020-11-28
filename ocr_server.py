@@ -10,6 +10,7 @@ import datetime
 from queue import Queue
 import threading
 import multiprocessing
+from setproctitle import setproctitle
 
 from config import Config
 import tools.logger as logger_
@@ -102,6 +103,8 @@ if __name__ == '__main__':
     parser.add_argument('--det', type=str, help='detection model', default="DB")
     parser.add_argument('--rec', type=str, help='recognize language model', default="ch,japan,en,korean")
     args = parser.parse_args()
+
+    setproctitle('ocr_server_{}_{}'.format(args.rec, args.port))
 
     ports = args.port.split("_")  # [args.port]
     gpus = args.gpu.split("_")  # [args.gpu]

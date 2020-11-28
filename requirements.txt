@@ -1,0 +1,10 @@
+shapely
+imgaug
+pyclipper
+lmdb
+tqdm
+numpy
+opencv-python
+setproctitle
+paddlepaddle-gpu==2.0.0b0
+paddlehub

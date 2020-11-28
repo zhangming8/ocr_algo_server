@@ -104,7 +104,7 @@ if __name__ == '__main__':
     parser.add_argument('--rec', type=str, help='recognize language model', default="ch,japan,en,korean")
     args = parser.parse_args()
 
-    setproctitle('ocr_server_{}_{}'.format(args.rec, args.port))
+    setproctitle('ocr_server_{}_{}'.format(args.port, args.rec))
 
     ports = args.port.split("_")  # [args.port]
     gpus = args.gpu.split("_")  # [args.gpu]

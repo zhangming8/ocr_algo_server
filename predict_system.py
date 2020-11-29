@@ -246,6 +246,6 @@ if __name__ == "__main__":
     from config import Config
 
     config = Config()
-    config.vis_font_path = "/home/lishundong/Desktop/torch_project/PaddleOCR/doc/simfang.ttf"
-    config.image_dir = "/media/lishundong/DATA2/docker/data/ocr/Dango/received_imgs/8801/tmp"
+    config.vis_font_path = "/media/ming/DATA2/PaddleOCR/doc/japan.ttc"
+    config.image_dir = "/media/ming/DATA3/Dango/received_imgs/8801/detect/test/2020-10-30_test"
     main(config)

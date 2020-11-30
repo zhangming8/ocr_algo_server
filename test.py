@@ -47,7 +47,7 @@ def draw_txt(img, ann, show=False):
         for idx, pt in enumerate(points):
             cv2.circle(img, (pt[0], pt[1]), 5, color, thickness=2)
             cv2.putText(img, str(idx), (pt[0], pt[1]), cv2.FONT_HERSHEY_SIMPLEX, 1, color, thickness=1)
-        img = add_chinese_text(img, text, points[0][0], points[0][1]-20, color=color[::-1])
+        img = add_chinese_text(img, text, points[0][0], points[0][1] - 20, color=color[::-1])
         num += 1
 
     if show:
@@ -61,7 +61,7 @@ def draw_txt(img, ann, show=False):
 
 
 if __name__ == "__main__":
-    port = '8812'
+    port = '8811'  # '8812'
     # language = ['ENG', 'JAP', 'KOR', 'CH']
     language = ['JAP']
     request_url = "http://180.76.228.199:{}/dango/algo/ocr/server".format(port)

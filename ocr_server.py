@@ -10,12 +10,14 @@ import datetime
 from queue import Queue
 import threading
 import multiprocessing
+import random
 from setproctitle import setproctitle
 
 from config import Config
 import tools.logger as logger_
 from tools.infer.utility import base64_to_cv2, mkdir
 from predict_system import OCR
+from translate.API import translate
 
 app = Flask("server", static_url_path='')
 app.config['PROPAGATE_EXCEPTIONS'] = True
@@ -24,37 +26,45 @@ _save_image_q = Queue(1000)
 config = Config()
 
 
-@app.route("/dango/algo/ocr/hello", methods=['POST', 'GET'])
-def hello():
-    return Response(json.dumps({'status': 0, 'data': 'hello, I am OK!'}), mimetype='application/json')
-
-
 @app.route("/dango/algo/ocr/server", methods=['POST', 'GET'])
-def receive_img():
+def ocr_server():
     try:
         logger.info("-" * 50)
         logger.info("端口 {} /dango/algo/ocr/server 收到请求".format(g_port))
 
         now_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S-%f')
         day = "-".join(now_time.split("-")[:3])
-        # content = request.get_json()
+        params = request.get_json()
         content = request.form
+
         images = content['image']
         language_type = content['language_type']
         user_id = content["user_id"]
         platform = content.get('platform', None)
+        is_translate = params.get("is_translate", False)
 
         images_decode = [base64_to_cv2(images)]
         logger.info("收到: {}, {}, {}".format(user_id, platform, language_type))
 
         result = ocr.predict(language_type, images=images_decode)
-        logger.info("识别结果为: {}".format(result))
-
+        logger.info("识别结果为: {}, 是否需要翻译: {}".format(result, is_translate))
         save_basename = "{}/{}/{}_{}_{}_{}_{}".format(config.save_dir + "/" + g_port, day, g_port, platform, user_id,
                                                       language_type, now_time)
-
         _save_image_q.put([save_basename, images_decode, result])
-        return Response(json.dumps({'status': 0, 'data': {'result': result}}), mimetype='application/json')
+
+        is_translated = False
+        if is_translate:
+            logger.info("开始进行翻译...")
+            rand_idx = random.randint(0, len(config.baidu_translate_secret_key)-1)
+            fanyi_app_id, fanyi_secret_key = config.baidu_translate_app_id[rand_idx], config.baidu_translate_secret_key
+            result, is_translated = translate(result[0], fanyi_app_id, fanyi_secret_key)
+            if is_translated:
+                logger.info("翻译成功: {}, 结果为: {}".format(is_translated, result))
+            else:
+                logger.info("翻译失败: {}, 错误码: {}".format(is_translated, result))
+
+        return Response(json.dumps({'status': 0, 'data': {'result': result, 'is_translated': is_translated}}),
+                        mimetype='application/json')
 
     except:
         e = traceback.format_exc()

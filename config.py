@@ -10,6 +10,8 @@ class Config(object):
     gpu_mem = 8000
     save_dir = "./received_imgs"
     language_map = {"ENG": "en", "JAP": "japan", "KOR": "korean", "CH": "ch"}
+    baidu_translate_app_id = ["20201017000591885"]
+    baidu_translate_secret_key = ["CK6fgXm9h3heLd4HWoqD"]
     language_map_reverse = {v: k for k, v in language_map.items()}
 
     # params for text detector
@@ -29,6 +31,7 @@ class Config(object):
 
     use_zero_copy_run = False
     use_pdserving = False
+    assert len(baidu_translate_app_id) == len(baidu_translate_secret_key)
 
     def update(self, language):
         if language == "japan" or language == self.language_map_reverse["japan"]:

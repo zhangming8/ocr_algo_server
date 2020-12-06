@@ -66,7 +66,7 @@ if __name__ == "__main__":
     language = ['JAP']
     request_url = "http://180.76.228.199:{}/dango/algo/ocr/server".format(port)
     # request_url = "http://0.0.0.0:{}/dango/algo/ocr/server".format(port)
-    img_path = "/media/ming/DATA3/Dango/received_imgs/8801/detect/test/2020-10-30_test"
+    img_path = "/media/ming/DATA3/Dango/received_imgs/detect/test/2020-10-30_test"
     font_path = "/media/ming/DATA2/PaddleOCR/doc/japan.ttc"
     test_num = 10
 

@@ -10,6 +10,7 @@ import datetime
 from queue import Queue
 import threading
 import multiprocessing
+import time
 import random
 from setproctitle import setproctitle
 
@@ -43,6 +44,7 @@ def ocr_server():
         platform = content.get('platform', None)
         need_translate = content.get("translate", 'no')
 
+        s1 = time.time()
         images_decode = [base64_to_cv2(images)]
         logger.info("收到: {}, {}, {}".format(user_id, platform, language_type))
 
@@ -56,16 +58,22 @@ def ocr_server():
         response_data = {'result': result, 'translated': translated}
         if need_translate == 'yes':
             logger.info("开始进行翻译...")
-            rand_idx = random.randint(0, len(config.baidu_translate_secret_key)-1)
+            s3 = time.time()
+            rand_idx = random.randint(0, len(config.baidu_translate_secret_key) - 1)
             fanyi_app_id = config.baidu_translate_app_id[rand_idx]
             fanyi_secret_key = config.baidu_translate_secret_key[rand_idx]
             translate_result, translated = translate(result[0], fanyi_app_id, fanyi_secret_key, logger)
             if translated:
                 logger.info("翻译成功: {}, 结果为: {}".format(translated, translate_result))
-                response_data = {'result': translate_result, 'translated': translated, 'org': result}
+                response_data['translate_result'] = translate_result
+                response_data['translated'] = translated
             else:
                 logger.info("翻译失败: {}, 错误码: {}".format(translated, translate_result))
+            s4 = time.time()
+            logger.info("翻译耗时: {}".format(s4 - s3))
 
+        s2 = time.time()
+        logger.info("==>> 完成, 总耗时 {} , 开始回复: {}".format(s2 - s1, response_data))
         return Response(json.dumps({'status': 0, 'data': response_data}),
                         mimetype='application/json')
 

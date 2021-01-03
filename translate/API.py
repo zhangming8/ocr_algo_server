@@ -170,7 +170,6 @@ def baidu(sentence, appid, secretKey, logger, fromLang='auto', toLang='zh'):
     logger.info("生成请求url: {}".format(myurl))
 
     success = True
-    s1 = time.time()
     try:
         httpClient = HTTPConnection('api.fanyi.baidu.com')
         httpClient.request('GET', myurl)
@@ -212,10 +211,6 @@ def baidu(sentence, appid, secretKey, logger, fromLang='auto', toLang='zh'):
     finally:
         if httpClient:
             httpClient.close()
-
-    s2 = time.time()
-    logger.info("翻译结束, 是否成功 {}: {}".format(result, success))
-    logger.info("翻译耗时: {}".format(s2 - s1))
 
     return string, success
 

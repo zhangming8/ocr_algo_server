@@ -56,7 +56,7 @@ class OCR(object):
             starttime = time.time()
             dt_boxes, rec_res = self.text_sys(img, language)
             elapse = time.time() - starttime
-            self.logger.info("==>> 整个流程结束,总耗时 time: {}".format(elapse))
+            self.logger.info("检测+识别流程结束,总耗时 time: {}".format(elapse))
 
             dt_num = len(dt_boxes)
             rec_res_final = []

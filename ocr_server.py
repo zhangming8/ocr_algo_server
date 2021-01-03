@@ -58,7 +58,7 @@ def ocr_server():
             logger.info("开始进行翻译...")
             rand_idx = random.randint(0, len(config.baidu_translate_secret_key)-1)
             fanyi_app_id, fanyi_secret_key = config.baidu_translate_app_id[rand_idx], config.baidu_translate_secret_key
-            translate_result, translated = translate(result[0], fanyi_app_id, fanyi_secret_key)
+            translate_result, translated = translate(result[0], fanyi_app_id, fanyi_secret_key, logger)
             if translated:
                 logger.info("翻译成功: {}, 结果为: {}".format(translated, translate_result))
                 response_data = {'result': translate_result, 'translated': translated, 'org': result}
@@ -86,7 +86,7 @@ def save_img():
                 cv2.imwrite(save_name, img)
                 with open(save_name.replace(".jpg", ".txt"), "w") as f:
                     f.write(str(words_result[idx]))
-                logger.info('保存图片 {}及txt'.format(save_name))
+                logger.info('保存图片 {} 及 txt'.format(save_name))
         except:
             e = traceback.format_exc()
             logger.info(e)

@@ -7,6 +7,7 @@ from urllib import parse
 from random import randint
 import json
 import re
+import time
 from traceback import print_exc
 
 from tencentcloud.common import credential
@@ -17,7 +18,7 @@ from tencentcloud.tmt.v20180321 import tmt_client, models
 
 
 # 翻译主函数
-def translate(texts, appid, secretKey):
+def translate(texts, appid, secretKey, logger):
     sentence = []
     for one_ann in texts:
         text = one_ann["text"]
@@ -27,7 +28,7 @@ def translate(texts, appid, secretKey):
 
     sentence = " ".join(sentence)
 
-    translate_result = baidu(sentence, appid, secretKey)
+    translate_result = baidu(sentence, appid, secretKey, logger)
     return translate_result
 
 
@@ -156,21 +157,20 @@ def ALAPI(sentence):
 
 
 # 私人百度翻译
-def baidu(sentence, appid, secretKey, logger):
+def baidu(sentence, appid, secretKey, logger, fromLang='auto', toLang='zh'):
     httpClient = None
     myurl = '/api/trans/vip/translate'
 
-    fromLang = 'auto'
-    toLang = 'zh'
     salt = randint(32768, 65536)
     q = sentence
     sign = appid + q + str(salt) + secretKey
     sign = md5(sign.encode()).hexdigest()
-    myurl = myurl + '?appid=' + appid + '&q=' + parse.quote(
-        q) + '&from=' + fromLang + '&to=' + toLang + '&salt=' + str(
+    myurl = myurl + '?appid=' + appid + '&q=' + parse.quote(q) + '&from=' + fromLang + '&to=' + toLang + '&salt=' + str(
         salt) + '&sign=' + sign
+    logger.info("生成请求url: {}".format(myurl))
 
     success = True
+    s1 = time.time()
     try:
         httpClient = HTTPConnection('api.fanyi.baidu.com')
         httpClient.request('GET', myurl)
@@ -212,6 +212,10 @@ def baidu(sentence, appid, secretKey, logger):
     finally:
         if httpClient:
             httpClient.close()
+
+    s2 = time.time()
+    logger.info("翻译结束, 是否成功 {}: {}".format(result, success))
+    logger.info("翻译耗时: {}".format(s2 - s1))
 
     return string, success
 

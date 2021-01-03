@@ -57,7 +57,8 @@ def ocr_server():
         if need_translate == 'yes':
             logger.info("开始进行翻译...")
             rand_idx = random.randint(0, len(config.baidu_translate_secret_key)-1)
-            fanyi_app_id, fanyi_secret_key = config.baidu_translate_app_id[rand_idx], config.baidu_translate_secret_key
+            fanyi_app_id = config.baidu_translate_app_id[rand_idx]
+            fanyi_secret_key = config.baidu_translate_secret_key[rand_idx]
             translate_result, translated = translate(result[0], fanyi_app_id, fanyi_secret_key, logger)
             if translated:
                 logger.info("翻译成功: {}, 结果为: {}".format(translated, translate_result))

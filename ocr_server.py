@@ -34,36 +34,38 @@ def ocr_server():
 
         now_time = datetime.datetime.now().strftime('%Y-%m-%d-%H-%M-%S-%f')
         day = "-".join(now_time.split("-")[:3])
-        params = request.get_json()
+        # params = request.get_json()
         content = request.form
 
         images = content['image']
         language_type = content['language_type']
         user_id = content["user_id"]
         platform = content.get('platform', None)
-        is_translate = params.get("is_translate", False)
+        need_translate = content.get("translate", 'no')
 
         images_decode = [base64_to_cv2(images)]
         logger.info("收到: {}, {}, {}".format(user_id, platform, language_type))
 
         result = ocr.predict(language_type, images=images_decode)
-        logger.info("识别结果为: {}, 是否需要翻译: {}".format(result, is_translate))
+        logger.info("识别结果为: {}, 是否需要翻译: {}".format(result, need_translate))
         save_basename = "{}/{}/{}_{}_{}_{}_{}".format(config.save_dir + "/" + g_port, day, g_port, platform, user_id,
                                                       language_type, now_time)
         _save_image_q.put([save_basename, images_decode, result])
 
-        is_translated = False
-        if is_translate:
+        translated = False
+        response_data = {'result': result, 'translated': translated}
+        if need_translate == 'yes':
             logger.info("开始进行翻译...")
             rand_idx = random.randint(0, len(config.baidu_translate_secret_key)-1)
             fanyi_app_id, fanyi_secret_key = config.baidu_translate_app_id[rand_idx], config.baidu_translate_secret_key
-            result, is_translated = translate(result[0], fanyi_app_id, fanyi_secret_key)
-            if is_translated:
-                logger.info("翻译成功: {}, 结果为: {}".format(is_translated, result))
+            translate_result, translated = translate(result[0], fanyi_app_id, fanyi_secret_key)
+            if translated:
+                logger.info("翻译成功: {}, 结果为: {}".format(translated, translate_result))
+                response_data = {'result': translate_result, 'translated': translated, 'org': result}
             else:
-                logger.info("翻译失败: {}, 错误码: {}".format(is_translated, result))
+                logger.info("翻译失败: {}, 错误码: {}".format(translated, translate_result))
 
-        return Response(json.dumps({'status': 0, 'data': {'result': result, 'is_translated': is_translated}}),
+        return Response(json.dumps({'status': 0, 'data': response_data}),
                         mimetype='application/json')
 
     except:

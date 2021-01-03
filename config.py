@@ -17,6 +17,7 @@ class Config(object):
     # params for text detector
     det_algorithm = "DB"
     det_model_dir = "./inference/det_db/ch_ppocr_server_v1.1_det_infer/"
+    # det_model_dir = "./output/det_r18_vd_db/best_accuracy_infer/"
     det_max_side_len = 960
 
     # DB parmas

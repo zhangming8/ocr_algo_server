@@ -63,16 +63,22 @@ def draw_txt(img, ann, show=False):
 
 if __name__ == "__main__":
     port = '8811'  # '8812'
-    # language = ['ENG', 'JAP', 'KOR', 'CH']
-    language = ['JAP']
+    language = ['ENG', 'JAP', 'KOR', 'CH']
+    # language = ['JAP']
     request_url = "http://0.0.0.0:{}/dango/algo/ocr/server".format(port)
-    img_path = "/media/ming/DATA3/Dango/received_imgs/detect/test/2020-10-30_test"
-    font_path = "./font/japan.ttc"
+    img_path = "./demo"
     test_num = 10
 
-    font_text = ImageFont.truetype(font_path, 20, encoding="utf-8")
     img_list = glob.glob(img_path + "/*.jpg")
     for lang in language:
+        font_path = "./font/{}.ttc".format(lang)
+        if lang in ["ENG", "CH"]:
+            font_path = "./font/CH_ENG.TTC"
+        elif lang in ["JAP"]:
+            font_path = "./font/japan.ttc"
+        else:
+            font_path = "./font/KOR.ttf"
+        font_text = ImageFont.truetype(font_path, 20, encoding="utf-8")
         num = 0
         for i, img_p in enumerate(img_list):
             if lang not in img_p:
@@ -93,7 +99,7 @@ if __name__ == "__main__":
 
             result = response['data']['result'][0]  # batch result, now we only use first one
             img_cv = cv2.imread(img_p)
-            draw_txt(img_cv, result, True)
-
+            img = draw_txt(img_cv, result, True)
+            cv2.imwrite("./demo_result/"+os.path.basename(img_p), img)
             if num > test_num:
                 break

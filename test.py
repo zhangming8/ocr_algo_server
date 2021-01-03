@@ -6,6 +6,7 @@ import cv2
 import numpy as np
 import shutil
 import os
+import json
 from PIL import Image, ImageDraw, ImageFont
 
 label_color = [[31, 0, 255], [0, 159, 255], [255, 0, 0], [0, 255, 25], [255, 0, 133],
@@ -64,10 +65,9 @@ if __name__ == "__main__":
     port = '8811'  # '8812'
     # language = ['ENG', 'JAP', 'KOR', 'CH']
     language = ['JAP']
-    request_url = "http://180.76.228.199:{}/dango/algo/ocr/server".format(port)
-    # request_url = "http://0.0.0.0:{}/dango/algo/ocr/server".format(port)
+    request_url = "http://0.0.0.0:{}/dango/algo/ocr/server".format(port)
     img_path = "/media/ming/DATA3/Dango/received_imgs/detect/test/2020-10-30_test"
-    font_path = "/media/ming/DATA2/PaddleOCR/doc/japan.ttc"
+    font_path = "./font/japan.ttc"
     test_num = 10
 
     font_text = ImageFont.truetype(font_path, 20, encoding="utf-8")

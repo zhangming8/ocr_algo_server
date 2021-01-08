@@ -57,13 +57,13 @@ class Config(object):
     def update_jap(self):
         # params for text recognizer
         self.rec_algorithm = "CRNN"
-        # self.rec_model_dir = "./inference/rec_crnn/japan_ppocr_mobile_v1.1_rec_infer/"
-        self.rec_model_dir = "./output/rec_japan/best_accuracy_infer/"
+        self.rec_model_dir = "./inference/rec_crnn/japan_ppocr_mobile_v1.1_rec_infer/"
+        # self.rec_model_dir = "./output/rec_japan/best_accuracy_infer/"
 
         self.rec_image_shape = "3, 32, 800"  # "3, 32, 320"
         self.rec_char_type = 'japan'  # "en", "ch", 'japan', 'korean', 'french', 'german'
         self.rec_batch_num = 4
-        self.max_text_length = 50  # 25
+        self.max_text_length = 25 # 50
 
         self.rec_char_dict_path = "ppocr/utils/dict/japan_dict.txt"
         self.use_space_char = False

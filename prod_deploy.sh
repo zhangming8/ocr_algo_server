@@ -5,7 +5,7 @@
 
 
 # 一个检测模型, 后面并联多个不同语言识别模型
-reco_language="ch,japan,en,korean,ch_h,french, german"
+reco_language="ch,japan,en,korean,ch_h,french,german"
 port="8811"
 gpu=0
 

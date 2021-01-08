@@ -9,7 +9,8 @@ class Config(object):
     enable_mkldnn = False
     gpu_mem = 8000
     save_dir = "./received_imgs"
-    language_map = {"ENG": "en", "JAP": "japan", "KOR": "korean", "CH": "ch"}
+    language_map = {"ENG": "en", "JAP": "japan", "KOR": "korean", "CH": "ch", "CH_h": "ch_h", "French": 'french',
+                    "German": 'german'}
     baidu_translate_app_id = ["20201017000591885"]
     baidu_translate_secret_key = ["CK6fgXm9h3heLd4HWoqD"]
     language_map_reverse = {v: k for k, v in language_map.items()}
@@ -43,6 +44,12 @@ class Config(object):
             self.update_korean()
         elif language == "ch" or language == self.language_map_reverse["ch"]:
             self.update_chinese()
+        elif language == "ch_h" or language == self.language_map_reverse["ch_h"]:
+            self.update_chinese_high()
+        elif language == "french" or language == self.language_map_reverse["french"]:
+            self.update_french()
+        elif language == "german" or language == self.language_map_reverse["german"]:
+            self.update_german()
         else:
             print("language not right: {}".format(language))
             raise NotImplementedError
@@ -79,7 +86,7 @@ class Config(object):
         self.max_text_length = 30
 
         self.rec_char_dict_path = "./ppocr/utils/ic15_dict.txt"
-        self.use_space_char = False
+        self.use_space_char = True
 
         self.use_angle_cls = False
         self.cls_model_dir = "./inference/cls/ch_ppocr_mobile_v1.1_cls_infer/"
@@ -119,12 +126,71 @@ class Config(object):
         self.max_text_length = 25
 
         self.rec_char_dict_path = "./ppocr/utils/ppocr_keys_v1.txt"
-        self.use_space_char = False
+        self.use_space_char = True
 
-        self.use_angle_cls = False # True
+        self.use_angle_cls = False  # True
         self.cls_model_dir = "./inference/cls/ch_ppocr_mobile_v1.1_cls_infer/"
         self.cls_image_shape = "3, 48, 192"
         self.label_list = ['0', '180']
         self.cls_batch_num = 30
         self.cls_thresh = 0.9
 
+    def update_chinese_high(self):
+        # params for text recognizer
+        self.rec_algorithm = "CRNN"
+        self.rec_model_dir = "./inference/rec_crnn/ch_ppocr_server_v1.1_rec_infer/"
+
+        self.rec_image_shape = "3, 32, 320"
+        self.rec_char_type = 'ch'  # "en", "ch", 'japan', 'korean', 'french', 'german'
+        self.rec_batch_num = 4
+        self.max_text_length = 25
+
+        self.rec_char_dict_path = "./ppocr/utils/ppocr_keys_v1.txt"
+        self.use_space_char = True
+
+        self.use_angle_cls = False  # True
+        self.cls_model_dir = "./inference/cls/ch_ppocr_mobile_v1.1_cls_infer/"
+        self.cls_image_shape = "3, 48, 192"
+        self.label_list = ['0', '180']
+        self.cls_batch_num = 30
+        self.cls_thresh = 0.9
+
+    def update_french(self):
+        # params for text recognizer
+        self.rec_algorithm = "CRNN"
+        self.rec_model_dir = "./inference/rec_crnn/french_ppocr_mobile_v1.1_rec_infer/"
+
+        self.rec_image_shape = "3, 32, 320"
+        self.rec_char_type = 'french'  # "en", "ch", 'japan', 'korean', 'french', 'german'
+        self.rec_batch_num = 4
+        self.max_text_length = 25
+
+        self.rec_char_dict_path = "./ppocr/utils/dict/french_dict.txt"
+        self.use_space_char = False
+
+        self.use_angle_cls = False
+        self.cls_model_dir = "./inference/cls/ch_ppocr_mobile_v1.1_cls_infer/"
+        self.cls_image_shape = "3, 48, 192"
+        self.label_list = ['0', '180']
+        self.cls_batch_num = 30
+        self.cls_thresh = 0.9
+
+    def update_german(self):
+        # params for text recognizer
+        self.rec_algorithm = "CRNN"
+        self.rec_model_dir = "./inference/rec_crnn/german_ppocr_mobile_v1.1_rec_infer/"
+
+        self.rec_image_shape = "3, 32, 320"
+        self.rec_char_type = 'german'  # "en", "ch", 'japan', 'korean', 'french', 'german'
+        self.rec_batch_num = 4
+        self.max_text_length = 25
+
+        self.rec_char_dict_path = "./ppocr/utils/dict/german_dict.txt"
+        self.use_space_char = False
+
+        self.use_angle_cls = False
+        self.cls_model_dir = "./inference/cls/ch_ppocr_mobile_v1.1_cls_infer/"
+        self.cls_image_shape = "3, 48, 192"
+        self.label_list = ['0', '180']
+        self.cls_batch_num = 30
+        self.cls_thresh = 0.9
